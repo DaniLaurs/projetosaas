@@ -13,12 +13,12 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  synchronize: true, // deixe true por enquanto
+  synchronize: true, // deixe true só no começo
   logging: false,
   entities: [User, Task],
   migrations: [],
   subscribers: [],
   ssl: {
-    rejectUnauthorized: false, // Supabase exige SSL
+    rejectUnauthorized: false, // necessário para Supabase
   },
 });
