@@ -11,12 +11,28 @@ dotenv.config();
 
 const app = express();
 
+// Configuração CORS para dev local e Vercel
+const allowedOrigins = [
+  "http://localhost:5173", // desenvolvimento local
+  "https://projetosaasfront-z6nl.vercel.app" // frontend deploy Vercel
+];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+}));
+
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+
 app.get("/", (req, res) => {
   res.send("API funcionando 🚀");
 });
-
 
 app.use("/api/auth", authRoutes);
 app.use("/api/plans", planRoutes);
