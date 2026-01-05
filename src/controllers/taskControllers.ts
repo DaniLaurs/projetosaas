@@ -4,27 +4,31 @@ import { taskService } from "../services/taskService";
 
 export const taskController = {
   async create(req: Request, res: Response) {
-    if (!req.userId) {
+    const userId = (req as any).userId;
+
+    if (!userId) {
       return res.status(401).json({ message: "Usuário não autenticado" });
     }
 
     const { title, description } = req.body;
 
     try {
-      const task = await taskService.createTask(req.userId, { title, description });
+      const task = await taskService.createTask(userId, { title, description });
       return res.json(task);
-    } catch (error) {
+    } catch {
       return res.status(400).json({ error: "Erro ao criar" });
     }
   },
 
   async list(req: Request, res: Response) {
-    if (!req.userId) {
+    const userId = (req as any).userId;
+
+    if (!userId) {
       return res.status(401).json({ message: "Usuário não autenticado" });
     }
 
     try {
-      const tasks = await taskService.listTasks(req.userId);
+      const tasks = await taskService.listTasks(userId);
       return res.json(tasks);
     } catch {
       return res.status(400).json({ error: "Erro ao listar" });
@@ -32,12 +36,14 @@ export const taskController = {
   },
 
   async pending(req: Request, res: Response) {
-    if (!req.userId) {
+    const userId = (req as any).userId;
+
+    if (!userId) {
       return res.status(401).json({ message: "Usuário não autenticado" });
     }
 
     try {
-      const tasks = await taskService.listPending(req.userId);
+      const tasks = await taskService.listPending(userId);
       return res.json(tasks);
     } catch {
       return res.status(400).json({ error: "Erro ao listar pendentes" });
@@ -45,12 +51,14 @@ export const taskController = {
   },
 
   async done(req: Request, res: Response) {
-    if (!req.userId) {
+    const userId = (req as any).userId;
+
+    if (!userId) {
       return res.status(401).json({ message: "Usuário não autenticado" });
     }
 
     try {
-      const tasks = await taskService.listDone(req.userId);
+      const tasks = await taskService.listDone(userId);
       return res.json(tasks);
     } catch {
       return res.status(400).json({ error: "Erro ao listar concluídas" });
@@ -58,14 +66,16 @@ export const taskController = {
   },
 
   async toggleDone(req: Request, res: Response) {
-    if (!req.userId) {
+    const userId = (req as any).userId;
+
+    if (!userId) {
       return res.status(401).json({ message: "Usuário não autenticado" });
     }
 
     const { id } = req.params;
 
     try {
-      const result = await taskService.toggleDone(Number(id), req.userId);
+      const result = await taskService.toggleDone(Number(id), userId);
       return res.json(result);
     } catch {
       return res.status(400).json({ error: "Erro ao alterar status" });
@@ -73,14 +83,16 @@ export const taskController = {
   },
 
   async deleteTask(req: Request, res: Response) {
-    if (!req.userId) {
+    const userId = (req as any).userId;
+
+    if (!userId) {
       return res.status(401).json({ message: "Usuário não autenticado" });
     }
 
     const { id } = req.params;
 
     try {
-      await taskService.deleteTask(Number(id), req.userId);
+      await taskService.deleteTask(Number(id), userId);
       return res.json({ message: "Tarefa removida" });
     } catch {
       return res.status(400).json({ error: "Erro ao remover tarefa" });

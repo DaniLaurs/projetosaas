@@ -18,9 +18,12 @@ export const authMiddleware = (
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as { userId: number };
-    req.userId = decoded.userId; // adiciona userId no request
+
+    // ✅ correção importante (resolve TODOS os erros de userId)
+    (req as any).userId = decoded.userId;
+
     next();
-  } catch (error) {
+  } catch {
     return res.status(401).json({ message: "Token inválido" });
   }
 };

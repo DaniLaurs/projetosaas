@@ -49,7 +49,8 @@ const signIn = async (req: Request, res: Response) => {
 
 export const updatePlan = async (req: Request, res: Response) => {
   const { plan } = req.body;
-  const userId = req.userId;
+  const userId = (req as any).userId;
+
 
   if (!plan)
     return res.status(400).json({ message: "Plano não informado" });
