@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -11,22 +12,18 @@ dotenv.config();
 
 const app = express();
 
-// Configuração CORS para dev local e Vercel
-const allowedOrigins = [
-  "http://localhost:5173", // desenvolvimento local
-  "https://projetosaasfront-z6nl.vercel.app" // frontend deploy Vercel
-];
-
-app.use(cors({
-  origin: function(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-}));
+/* ✅ CORS COMPATÍVEL COM RENDER + VITE */
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://projetosaasfront-z6nl.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
@@ -43,6 +40,8 @@ console.log("Iniciando backend...");
 AppDataSource.initialize()
   .then(() => {
     const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    app.listen(PORT, () =>
+      console.log(`Server running on port ${PORT}`)
+    );
   })
   .catch((err) => console.error("Data Source init error:", err));
