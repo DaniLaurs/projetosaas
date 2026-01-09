@@ -1,6 +1,13 @@
 import { Router } from "express";
-import { updatePlan } from "../controllers/authControllers";
+import { authController } from "../controllers/authControllers";
+import { authMiddleware } from "../middlewares/authMiddleware";
 
 const router = Router();
-router.post("/update", updatePlan);
+
+router.post(
+  "/plan",
+  authMiddleware,
+  authController.updatePlan
+);
+
 export default router;

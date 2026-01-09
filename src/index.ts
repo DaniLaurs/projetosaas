@@ -2,13 +2,13 @@ import "reflect-metadata";
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+dotenv.config();
 import { AppDataSource } from "./services/data-source";
 
 import authRoutes from "./routes/authRoute";
 import planRoutes from "./routes/planRoutes";
 import taskRoutes from "./routes/taskRoute";
 
-dotenv.config();
 
 const app = express();
 
